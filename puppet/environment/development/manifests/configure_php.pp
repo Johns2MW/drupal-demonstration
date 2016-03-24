@@ -1,145 +1,71 @@
 # variables
-$rpm_package_epel = 'http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm'
-$rpm_package_remi = 'http://rpms.famillecollet.com/enterprise/remi-release-7.rpm'
-$working_dir      = '/home/provisioner'
+$working_dir = '/home/provisioner'
 
 ## define $PATH for all execs
 Exec {path => ['/usr/bin/', '/usr/sbin/']}
 
-## download wget
-class download_wget {
-    include wget
-}
-
-## download rpm package(s)
-class download_rpm_packages {
-    ## set dependency
-    require download_wget
-
-    exec {'download-rpm-package':
-        command => "wget ${rpm_package_epel} && wget ${rpm_package_remi}",
-        cwd => "${working_dir}",
-    }
-}
-
-## install rpm package(s)
-class install_rpm_packages {
-    ## set dependency
-    require download_wget
-    require download_rpm_packages
-
-    exec {'install-rpm-package':
-        command => "rpm -Uvh ${rpm_package_epel} && rpm -Uvh ${rpm_package_remi}",
-        cwd => "${working_dir}",
-    }
-}
-
-## remove unnecessary rpm packages
-class clean_rpm_packages {
-    ## set dependency
-    require download_wget
-    require download_rpm_packages
-    require install_rpm_packages
-
-    exec {'remove-rpm-package':
-        command => 'rm *.rpm',
-        cwd => "${working_dir}",
-    }
-}
-
 ## update yum using the added EPEL repository
 class update_yum {
-    ## set dependency
-    require download_wget
-    require download_rpm_packages
-    require install_rpm_packages
-    require clean_rpm_packages
-
-    exec {'update-yum':
+    exec { 'update-yum':
         command => 'yum -y update',
         timeout => 750,
     }
 }
 
-## enable repo to install php 5.6
-class enable_php_repo {
-    ## set dependency
-    require download_wget
-    require download_rpm_packages
-    require install_rpm_packages
-    require clean_rpm_packages
-    require update_yum
-
-    exec {'enable-php-56-repo-1':
-        command => 'awk "/\[remi-php56\]/,/\[remi-test\]/ { if (/enabled=0/) \$0 = \"enabled=1\" }1"  /etc/yum.repos.d/remi.repo > /home/provisioner/remi.tmp',
-        notify => Exec['enable-php-56-repo-2'],
-    }
-    exec {'enable-php-56-repo-2':
-        command => "mv ${working_dir}/remi.tmp /etc/yum.repos.d/remi.repo",
-        refreshonly => true,
-    }
-}
-
 ## install php
-class install_php_packages {
+class install_php {
     ## set dependency
-    require download_wget
-    require download_rpm_packages
-    require install_rpm_packages
-    require clean_rpm_packages
     require update_yum
-    require enable_php_repo
 
-    ## variables
-    $php_packages = ['php', 'php-gd', 'php-mcrypt', 'php-opcache']
+    ## install php
+    class { 'php': version => '5.6.19' }
+}
 
-    package { $php_packages:
-        ensure => present,
+## configure php
+class configure_php {
+    ## set dependency
+    require update_yum
+    require install_php
+
+    ## set memory limit
+    ini_setting { 'adjust_memory_limit':
+        ensure  => present,
+        path    => '/etc/php.ini',
+        section => 'PHP',
+        setting => 'memory_limit',
+        value   => '512M',
+    }
+
+    ## enable opcache
+    file_line { 'enable_opcache':
+        path => '/etc/php.ini',
+        line => 'zend_extension=opcache.so',
     }
 }
 
-## enable opcache
-class enable_opcache {
-    ## set dependency
-    require download_wget
-    require download_rpm_packages
-    require install_rpm_packages
-    require clean_rpm_packages
-    require update_yum
-    require enable_php_repo
-    require install_php_packages
-
-    exec {'enable-opcache':
-        command => 'printf "\nzend_extension=opcache.so" >> /etc/php.ini',
-    }
-}
-
-## install phpmyadmin: requires the above 'add-epel', and 'update-yum'
+## install phpmyadmin
 class install_phpmyadmin {
     ## set dependency
-    require download_wget
-    require download_rpm_packages
-    require install_rpm_packages
-    require clean_rpm_packages
     require update_yum
-    require enable_php_repo
-    require install_php_packages
+    require install_php
+    require configure_php
 
-    exec {'install-phpmyadmin':
-        command => 'yum -y install phpmyadmin',
+    ## install phpmyadmin
+    node default {
+        class {'phpmyadmin':
+            ensure   => present,
+            version  => '4.6.0',
+            password => 'password',
+        }
     }
 }
 
 ## allow phpmyadmin access
 class enable_phpmyadmin {
     ## set dependency
-    require download_wget
-    require download_rpm_packages
-    require install_rpm_packages
-    require clean_rpm_packages
     require update_yum
-    require enable_php_repo
-    require install_php_packages
+    require install_php
+    require configure_php
     require install_phpmyadmin
 
     ## comment out unnecessary 'require' statements
@@ -187,35 +113,12 @@ class enable_phpmyadmin {
     }
 }
 
-## increase php memory limit (i.e. bootstrap 3 theme)
-class php_configuration {
-    ## set dependency
-    require download_wget
-    require download_rpm_packages
-    require install_rpm_packages
-    require clean_rpm_packages
-    require update_yum
-    require enable_php_repo
-    require install_php_packages
-    require install_phpmyadmin
-    require enable_phpmyadmin
-
-    exec {'php-memory-limit':
-        command => 'sed -i "s/memory_limit = 128M/memory_limit = 512M/" /etc/php.ini',
-    }
-}
-
 ## restart httpd
 class restart_httpd {
     ## set dependency
-    require download_wget
-    require download_rpm_packages
-    require install_rpm_packages
-    require clean_rpm_packages
     require update_yum
-    require enable_php_repo
-    require install_php_packages
-    require enable_opcache
+    require install_php
+    require configure_php
     require install_phpmyadmin
     require enable_phpmyadmin
 
@@ -226,14 +129,10 @@ class restart_httpd {
 
 ## constructor
 class constructor {
-    contain download_wget
-    contain download_rpm_packages
-    contain install_rpm_packages
-    contain clean_rpm_packages
+    ## set dependency
     contain update_yum
-    contain enable_php_repo
-    contain install_php_packages
-    contain enable_opcache
+    contain install_php
+    contain configure_php
     contain install_phpmyadmin
     contain enable_phpmyadmin
     contain restart_httpd
