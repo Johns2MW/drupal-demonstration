@@ -27,6 +27,11 @@ mod 'mysql',
   :git => 'git@github.com:puppetlabs/puppetlabs-mysql.git',
   :ref => '3.6.2'
 
+## Install Module: php
+mod 'puppet-php',
+  :git => 'git@github.com:thias/puppet-php.git',
+  :ref => '1.2.0'
+
 ## Install Module: concat (apache dependency)
 mod 'concat',
   :git => 'git@github.com:puppetlabs/puppetlabs-concat.git',
