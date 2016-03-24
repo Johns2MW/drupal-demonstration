@@ -33,10 +33,12 @@ mod 'puppet-php',
   :ref => 'v2.0.24'
 
 ## Install Module: to adjust ini files
+mod 'inifile',
   :git => 'git@github.com:puppetlabs/puppetlabs-inifile',
   :ref => '1.5.0'
 
 ## Install Module: phpmyadmin
+mod 'phpmyadmin',
   :git => 'git@github.com:leonardothibes/puppet-phpmyadmin',
   :ref => '1.0.5'
 
