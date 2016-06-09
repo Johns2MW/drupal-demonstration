@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * sample_project_member.features.user_permission.inc
+ * custom_organic_groups.features.user_permission.inc
  */
 
 /**
  * Implements hook_user_default_permissions().
  */
-function sample_project_member_user_default_permissions() {
+function custom_organic_groups_user_default_permissions() {
   $permissions = array();
 
   // Exported permission: 'access administration pages'.
@@ -22,17 +22,32 @@ function sample_project_member_user_default_permissions() {
   // Exported permission: 'access all views'.
   $permissions['access all views'] = array(
     'name' => 'access all views',
+    'roles' => array(),
+    'module' => 'views',
+  );
+
+  // Exported permission: 'access backup and migrate'.
+  $permissions['access backup and migrate'] = array(
+    'name' => 'access backup and migrate',
     'roles' => array(
       'administrator' => 'administrator',
     ),
-    'module' => 'views',
+    'module' => 'backup_migrate',
+  );
+
+  // Exported permission: 'access backup files'.
+  $permissions['access backup files'] = array(
+    'name' => 'access backup files',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'backup_migrate',
   );
 
   // Exported permission: 'access comments'.
   $permissions['access comments'] = array(
     'name' => 'access comments',
     'roles' => array(
-      'Member' => 'Member',
       'administrator' => 'administrator',
     ),
     'module' => 'comment',
@@ -42,8 +57,8 @@ function sample_project_member_user_default_permissions() {
   $permissions['access content'] = array(
     'name' => 'access content',
     'roles' => array(
-      'Member' => 'Member',
       'administrator' => 'administrator',
+      'tester' => 'tester',
     ),
     'module' => 'node',
   );
@@ -53,6 +68,7 @@ function sample_project_member_user_default_permissions() {
     'name' => 'access content overview',
     'roles' => array(
       'administrator' => 'administrator',
+      'tester' => 'tester',
     ),
     'module' => 'node',
   );
@@ -84,15 +100,6 @@ function sample_project_member_user_default_permissions() {
     'module' => 'overlay',
   );
 
-  // Exported permission: 'access printer-friendly version'.
-  $permissions['access printer-friendly version'] = array(
-    'name' => 'access printer-friendly version',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'book',
-  );
-
   // Exported permission: 'access site in maintenance mode'.
   $permissions['access site in maintenance mode'] = array(
     'name' => 'access site in maintenance mode',
@@ -111,24 +118,6 @@ function sample_project_member_user_default_permissions() {
     'module' => 'system',
   );
 
-  // Exported permission: 'access site-wide contact form'.
-  $permissions['access site-wide contact form'] = array(
-    'name' => 'access site-wide contact form',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'contact',
-  );
-
-  // Exported permission: 'access statistics'.
-  $permissions['access statistics'] = array(
-    'name' => 'access statistics',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'statistics',
-  );
-
   // Exported permission: 'access toolbar'.
   $permissions['access toolbar'] = array(
     'name' => 'access toolbar',
@@ -138,32 +127,13 @@ function sample_project_member_user_default_permissions() {
     'module' => 'toolbar',
   );
 
-  // Exported permission: 'access user contact forms'.
-  $permissions['access user contact forms'] = array(
-    'name' => 'access user contact forms',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'contact',
-  );
-
   // Exported permission: 'access user profiles'.
   $permissions['access user profiles'] = array(
     'name' => 'access user profiles',
     'roles' => array(
-      'Member' => 'Member',
       'administrator' => 'administrator',
     ),
     'module' => 'user',
-  );
-
-  // Exported permission: 'add content to books'.
-  $permissions['add content to books'] = array(
-    'name' => 'add content to books',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'book',
   );
 
   // Exported permission: 'administer actions'.
@@ -175,6 +145,15 @@ function sample_project_member_user_default_permissions() {
     'module' => 'system',
   );
 
+  // Exported permission: 'administer backup and migrate'.
+  $permissions['administer backup and migrate'] = array(
+    'name' => 'administer backup and migrate',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'backup_migrate',
+  );
+
   // Exported permission: 'administer blocks'.
   $permissions['administer blocks'] = array(
     'name' => 'administer blocks',
@@ -184,15 +163,6 @@ function sample_project_member_user_default_permissions() {
     'module' => 'block',
   );
 
-  // Exported permission: 'administer book outlines'.
-  $permissions['administer book outlines'] = array(
-    'name' => 'administer book outlines',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'book',
-  );
-
   // Exported permission: 'administer comments'.
   $permissions['administer comments'] = array(
     'name' => 'administer comments',
@@ -200,15 +170,6 @@ function sample_project_member_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'comment',
-  );
-
-  // Exported permission: 'administer contact forms'.
-  $permissions['administer contact forms'] = array(
-    'name' => 'administer contact forms',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'contact',
   );
 
   // Exported permission: 'administer content types'.
@@ -319,6 +280,15 @@ function sample_project_member_user_default_permissions() {
     'module' => 'search',
   );
 
+  // Exported permission: 'administer shortcuts'.
+  $permissions['administer shortcuts'] = array(
+    'name' => 'administer shortcuts',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'shortcut',
+  );
+
   // Exported permission: 'administer site configuration'.
   $permissions['administer site configuration'] = array(
     'name' => 'administer site configuration',
@@ -337,13 +307,13 @@ function sample_project_member_user_default_permissions() {
     'module' => 'system',
   );
 
-  // Exported permission: 'administer statistics'.
-  $permissions['administer statistics'] = array(
-    'name' => 'administer statistics',
+  // Exported permission: 'administer taxonomy'.
+  $permissions['administer taxonomy'] = array(
+    'name' => 'administer taxonomy',
     'roles' => array(
       'administrator' => 'administrator',
     ),
-    'module' => 'statistics',
+    'module' => 'taxonomy',
   );
 
   // Exported permission: 'administer themes'.
@@ -376,9 +346,7 @@ function sample_project_member_user_default_permissions() {
   // Exported permission: 'administer views'.
   $permissions['administer views'] = array(
     'name' => 'administer views',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
+    'roles' => array(),
     'module' => 'views',
   );
 
@@ -409,16 +377,6 @@ function sample_project_member_user_default_permissions() {
     'module' => 'user',
   );
 
-  // Exported permission: 'cancel own vote'.
-  $permissions['cancel own vote'] = array(
-    'name' => 'cancel own vote',
-    'roles' => array(
-      'Member' => 'Member',
-      'administrator' => 'administrator',
-    ),
-    'module' => 'poll',
-  );
-
   // Exported permission: 'change own username'.
   $permissions['change own username'] = array(
     'name' => 'change own username',
@@ -428,49 +386,27 @@ function sample_project_member_user_default_permissions() {
     'module' => 'user',
   );
 
-  // Exported permission: 'create blog content'.
-  $permissions['create blog content'] = array(
-    'name' => 'create blog content',
+  // Exported permission: 'create basic_page content'.
+  $permissions['create basic_page content'] = array(
+    'name' => 'create basic_page content',
     'roles' => array(
-      'Member' => 'Member',
-      'administrator' => 'administrator',
+      'tester' => 'tester',
     ),
     'module' => 'node',
   );
 
-  // Exported permission: 'create book content'.
-  $permissions['create book content'] = array(
-    'name' => 'create book content',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
+  // Exported permission: 'create group content'.
+  $permissions['create group content'] = array(
+    'name' => 'create group content',
+    'roles' => array(),
     'module' => 'node',
   );
 
-  // Exported permission: 'create new books'.
-  $permissions['create new books'] = array(
-    'name' => 'create new books',
+  // Exported permission: 'create subgroup content'.
+  $permissions['create subgroup content'] = array(
+    'name' => 'create subgroup content',
     'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'book',
-  );
-
-  // Exported permission: 'create poll content'.
-  $permissions['create poll content'] = array(
-    'name' => 'create poll content',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'create project_page content'.
-  $permissions['create project_page content'] = array(
-    'name' => 'create project_page content',
-    'roles' => array(
-      'Member' => 'Member',
-      'administrator' => 'administrator',
+      'tester' => 'tester',
     ),
     'module' => 'node',
   );
@@ -484,76 +420,66 @@ function sample_project_member_user_default_permissions() {
     'module' => 'path',
   );
 
-  // Exported permission: 'delete any blog content'.
-  $permissions['delete any blog content'] = array(
-    'name' => 'delete any blog content',
+  // Exported permission: 'customize shortcut links'.
+  $permissions['customize shortcut links'] = array(
+    'name' => 'customize shortcut links',
     'roles' => array(
       'administrator' => 'administrator',
+    ),
+    'module' => 'shortcut',
+  );
+
+  // Exported permission: 'delete any basic_page content'.
+  $permissions['delete any basic_page content'] = array(
+    'name' => 'delete any basic_page content',
+    'roles' => array(),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'delete any group content'.
+  $permissions['delete any group content'] = array(
+    'name' => 'delete any group content',
+    'roles' => array(),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'delete any subgroup content'.
+  $permissions['delete any subgroup content'] = array(
+    'name' => 'delete any subgroup content',
+    'roles' => array(),
+    'module' => 'node',
+  );
+
+  // Exported permission: 'delete backup files'.
+  $permissions['delete backup files'] = array(
+    'name' => 'delete backup files',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'backup_migrate',
+  );
+
+  // Exported permission: 'delete own basic_page content'.
+  $permissions['delete own basic_page content'] = array(
+    'name' => 'delete own basic_page content',
+    'roles' => array(
+      'tester' => 'tester',
     ),
     'module' => 'node',
   );
 
-  // Exported permission: 'delete any book content'.
-  $permissions['delete any book content'] = array(
-    'name' => 'delete any book content',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
+  // Exported permission: 'delete own group content'.
+  $permissions['delete own group content'] = array(
+    'name' => 'delete own group content',
+    'roles' => array(),
     'module' => 'node',
   );
 
-  // Exported permission: 'delete any poll content'.
-  $permissions['delete any poll content'] = array(
-    'name' => 'delete any poll content',
+  // Exported permission: 'delete own subgroup content'.
+  $permissions['delete own subgroup content'] = array(
+    'name' => 'delete own subgroup content',
     'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete any project_page content'.
-  $permissions['delete any project_page content'] = array(
-    'name' => 'delete any project_page content',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete own blog content'.
-  $permissions['delete own blog content'] = array(
-    'name' => 'delete own blog content',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete own book content'.
-  $permissions['delete own book content'] = array(
-    'name' => 'delete own book content',
-    'roles' => array(
-      'Member' => 'Member',
-      'administrator' => 'administrator',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete own poll content'.
-  $permissions['delete own poll content'] = array(
-    'name' => 'delete own poll content',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'delete own project_page content'.
-  $permissions['delete own project_page content'] = array(
-    'name' => 'delete own project_page content',
-    'roles' => array(
-      'Member' => 'Member',
-      'administrator' => 'administrator',
+      'tester' => 'tester',
     ),
     'module' => 'node',
   );
@@ -576,56 +502,32 @@ function sample_project_member_user_default_permissions() {
     'module' => 'og_features',
   );
 
-  // Exported permission: 'edit any blog content'.
-  $permissions['edit any blog content'] = array(
-    'name' => 'edit any blog content',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
+  // Exported permission: 'edit any basic_page content'.
+  $permissions['edit any basic_page content'] = array(
+    'name' => 'edit any basic_page content',
+    'roles' => array(),
     'module' => 'node',
   );
 
-  // Exported permission: 'edit any book content'.
-  $permissions['edit any book content'] = array(
-    'name' => 'edit any book content',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
+  // Exported permission: 'edit any group content'.
+  $permissions['edit any group content'] = array(
+    'name' => 'edit any group content',
+    'roles' => array(),
     'module' => 'node',
   );
 
-  // Exported permission: 'edit any poll content'.
-  $permissions['edit any poll content'] = array(
-    'name' => 'edit any poll content',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
+  // Exported permission: 'edit any subgroup content'.
+  $permissions['edit any subgroup content'] = array(
+    'name' => 'edit any subgroup content',
+    'roles' => array(),
     'module' => 'node',
   );
 
-  // Exported permission: 'edit any project_page content'.
-  $permissions['edit any project_page content'] = array(
-    'name' => 'edit any project_page content',
+  // Exported permission: 'edit own basic_page content'.
+  $permissions['edit own basic_page content'] = array(
+    'name' => 'edit own basic_page content',
     'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit own blog content'.
-  $permissions['edit own blog content'] = array(
-    'name' => 'edit own blog content',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit own book content'.
-  $permissions['edit own book content'] = array(
-    'name' => 'edit own book content',
-    'roles' => array(
-      'administrator' => 'administrator',
+      'tester' => 'tester',
     ),
     'module' => 'node',
   );
@@ -634,10 +536,16 @@ function sample_project_member_user_default_permissions() {
   $permissions['edit own comments'] = array(
     'name' => 'edit own comments',
     'roles' => array(
-      'Member' => 'Member',
       'administrator' => 'administrator',
     ),
     'module' => 'comment',
+  );
+
+  // Exported permission: 'edit own group content'.
+  $permissions['edit own group content'] = array(
+    'name' => 'edit own group content',
+    'roles' => array(),
+    'module' => 'node',
   );
 
   // Exported permission: 'edit own group features'.
@@ -649,21 +557,11 @@ function sample_project_member_user_default_permissions() {
     'module' => 'og_features',
   );
 
-  // Exported permission: 'edit own poll content'.
-  $permissions['edit own poll content'] = array(
-    'name' => 'edit own poll content',
+  // Exported permission: 'edit own subgroup content'.
+  $permissions['edit own subgroup content'] = array(
+    'name' => 'edit own subgroup content',
     'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: 'edit own project_page content'.
-  $permissions['edit own project_page content'] = array(
-    'name' => 'edit own project_page content',
-    'roles' => array(
-      'Member' => 'Member',
-      'administrator' => 'administrator',
+      'tester' => 'tester',
     ),
     'module' => 'node',
   );
@@ -677,16 +575,6 @@ function sample_project_member_user_default_permissions() {
     'module' => 'features',
   );
 
-  // Exported permission: 'inspect all votes'.
-  $permissions['inspect all votes'] = array(
-    'name' => 'inspect all votes',
-    'roles' => array(
-      'Member' => 'Member',
-      'administrator' => 'administrator',
-    ),
-    'module' => 'poll',
-  );
-
   // Exported permission: 'manage features'.
   $permissions['manage features'] = array(
     'name' => 'manage features',
@@ -694,6 +582,15 @@ function sample_project_member_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'features',
+  );
+
+  // Exported permission: 'perform backup'.
+  $permissions['perform backup'] = array(
+    'name' => 'perform backup',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'backup_migrate',
   );
 
   // Exported permission: 'post comments'.
@@ -712,6 +609,15 @@ function sample_project_member_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'features',
+  );
+
+  // Exported permission: 'restore from backup'.
+  $permissions['restore from backup'] = array(
+    'name' => 'restore from backup',
+    'roles' => array(
+      'administrator' => 'administrator',
+    ),
+    'module' => 'backup_migrate',
   );
 
   // Exported permission: 'revert revisions'.
@@ -750,13 +656,13 @@ function sample_project_member_user_default_permissions() {
     'module' => 'comment',
   );
 
-  // Exported permission: 'translate content'.
-  $permissions['translate content'] = array(
-    'name' => 'translate content',
+  // Exported permission: 'switch shortcut sets'.
+  $permissions['switch shortcut sets'] = array(
+    'name' => 'switch shortcut sets',
     'roles' => array(
       'administrator' => 'administrator',
     ),
-    'module' => 'translation',
+    'module' => 'shortcut',
   );
 
   // Exported permission: 'translate interface'.
@@ -780,9 +686,7 @@ function sample_project_member_user_default_permissions() {
   // Exported permission: 'use ctools import'.
   $permissions['use ctools import'] = array(
     'name' => 'use ctools import',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
+    'roles' => array(),
     'module' => 'ctools',
   );
 
@@ -790,26 +694,15 @@ function sample_project_member_user_default_permissions() {
   $permissions['view own unpublished content'] = array(
     'name' => 'view own unpublished content',
     'roles' => array(
-      'Member' => 'Member',
       'administrator' => 'administrator',
     ),
     'module' => 'node',
-  );
-
-  // Exported permission: 'view post access counter'.
-  $permissions['view post access counter'] = array(
-    'name' => 'view post access counter',
-    'roles' => array(
-      'administrator' => 'administrator',
-    ),
-    'module' => 'statistics',
   );
 
   // Exported permission: 'view revisions'.
   $permissions['view revisions'] = array(
     'name' => 'view revisions',
     'roles' => array(
-      'Member' => 'Member',
       'administrator' => 'administrator',
     ),
     'module' => 'node',
@@ -822,16 +715,6 @@ function sample_project_member_user_default_permissions() {
       'administrator' => 'administrator',
     ),
     'module' => 'system',
-  );
-
-  // Exported permission: 'vote on polls'.
-  $permissions['vote on polls'] = array(
-    'name' => 'vote on polls',
-    'roles' => array(
-      'Member' => 'Member',
-      'administrator' => 'administrator',
-    ),
-    'module' => 'poll',
   );
 
   return $permissions;

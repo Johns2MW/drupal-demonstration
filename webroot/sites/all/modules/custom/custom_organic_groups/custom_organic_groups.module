@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Custom Organic Groups feature.
+ */
+
+include_once 'custom_organic_groups.features.inc';

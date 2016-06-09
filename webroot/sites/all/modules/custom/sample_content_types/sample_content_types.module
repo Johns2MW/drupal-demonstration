@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the sample content types feature.
- */
-
-include_once 'sample_content_types.features.inc';
